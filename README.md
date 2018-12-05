@@ -2,7 +2,7 @@
 
 This package provides data loader for semantic segmentation of aerial images.
 By now, it supports gluon/mxnet and pytorch.
-And it can be used to the task of the regular semantic segmentation and
+And it can be used to the tasks of the regular semantic segmentation and
 semantic segmentation based on multi-modal data.
 
 ## Usage
