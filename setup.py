@@ -13,8 +13,9 @@ setup(
     license='',
 
     # Package info
-    packages=find_packages('rsreader'),
-    package_dir = {'':'rsreader'},
+    packages=["rsreader"],
+    # packages=find_packages('rsreader'),
+    # package_dir = {'':'rsreader'},
 
     zip_safe=True,
     include_package_data=True,
