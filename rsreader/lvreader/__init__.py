@@ -1,6 +1,8 @@
 from __future__ import absolute_import
 
-from . import BaseReader
+__all__ = ['BaseReader', 'GdalReader', 'OpenCVReader', 'PILReader']
+
+# from . import BaseReader
 # from . import GdalReader
 # from . import  OpenCVReader
-from . import  PILReader
+# from . import  PILReader
