@@ -1,5 +1,5 @@
-import os
-import time
+import os, time
+import numpy as np
 
 def check_mkdir(dir_name):
     if not os.path.exists(dir_name):
@@ -38,3 +38,18 @@ class GPUScheduler(object):
         print('release')
         if self.locked:
             self.unlock()
+
+def linearStrech(img, low_p=2, high_p=98):
+    '''
+    Image should be in shape of (W,C)
+    '''
+    img = img.astype(np.int64)
+    lowest_2p = np.percentile(img,low_p)
+    highest_2p = np.percentile(img,high_p)
+    img_cut = (img<=highest_2p)*(img>=lowest_2p)*img
+    img_cut += (img>highest_2p)*int(highest_2p)
+    img_cut += (img<lowest_2p)*int(lowest_2p)
+    img = img_cut
+    img = (img-lowest_2p)/(highest_2p-lowest_2p)
+    img *= 255
+    return img
