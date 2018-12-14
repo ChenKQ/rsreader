@@ -1,6 +1,7 @@
 from __future__ import absolute_import
 
-__all__ = ['SegReader','SimpleBatch','DeeplabReader', 'DSCNNReader', 'MIMOSegReader', 'SCNNReader','mxreader','torchreader']
+__all__ = ['SegReader','SimpleBatch','DeeplabReader', 'DSCNNReader', 'MIMOSegReader', 'SCNNReader', \
+           'CollectReader','mxreader','torchreader']
 
 # from . import SegReader
 # from . import SimpleBatch
