@@ -24,7 +24,7 @@ class CollectReader(SegReader):
             gtReader=sample.gt[0]
         else:
             gtReader = None
-        scale = self.__getScale()
+        scale = self._getScale()
         self.readsize = (int(scale[0]*self.cropsize[0]),int(scale[1]*self.cropsize[1]))
         if self.readsize[0] == -1:
             self.readsize = imgReaders[0].getSize()

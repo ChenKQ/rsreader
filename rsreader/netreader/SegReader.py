@@ -137,7 +137,7 @@ class SegReader(object):
             label = None
         return data,label
 
-    def __getScale(self):
+    def _getScale(self):
         scale = [1.0,1.0]
         if not self.joint_trans is None:
             gs = self.joint_trans.getScale()
