@@ -40,11 +40,11 @@ class CollectReader(SegReader):
                 bandlst = None
             else:
                 bandlst = self.bandlist[idx]
-            img_lst[idx] = reader.readPatch(initx, inity,
+            img_lst.append(reader.readPatch(initx, inity,
                                                      width = self.readsize[1],
                                                      height=self.readsize[0],
                                                      bandlst=bandlst,
-                                                     dtype=np.float32)
+                                                     dtype=np.float32))
         if self.withgt:
             label=gtReader.readPatch(initx,inity,width = self.readsize[1],height=self.readsize[0],
                                             bandlst=[],dtype=np.uint8)[0]
