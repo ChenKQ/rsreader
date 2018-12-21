@@ -16,10 +16,10 @@ class GdalReader(object):
         '''
         self.imgfile=imgfile
         self.bands=[]
-        self.__open()
-        self.__getBands()
+        self._open()
+        self._getBands()
 
-    def __open(self):
+    def _open(self):
         '''
         This method opens imgfile with gdal and it is stored in self.dataset
         :return: None
@@ -46,7 +46,7 @@ class GdalReader(object):
         '''
         return (int(self.dataset.RasterYSize),int(self.dataset.RasterXSize))
 
-    def __getBands(self):
+    def _getBands(self):
         '''
         This method gets all bands of tiff file and these bands are stored in self.bands. It is a list type.
         :return: None
@@ -92,7 +92,14 @@ class GdalReader(object):
         :param dtype: the data type used to store the image. It can be numpy.uint8, np.uint16 and so on.
         :return: the image read into the memory in the format of numpy.ndarray with the shape of (channel, heigh, width)
         '''
-        return self.readPatch(0,0,self.dataset.RasterXSize,self.dataset.RasterYSize,bandlst,dtype)
+        if bandlst is None or len(bandlst)==0:
+            bandlst = range(1,self.dataset.RasterCount+1)
+        img = []
+        for idx in bandlst:
+            img.append(self.bands[idx-1].ReadAsArray())
+        img = np.asarray(img, dtype=dtype)
+        return img
+        # return self.readPatch(0,0,self.dataset.RasterXSize,self.dataset.RasterYSize,bandlst,dtype)
 
     @classmethod
     def write(cls,outputPath,nbands,proj,trans,dataNumpy,gdalDType=gdal.GDT_Float32,npDType=np.float32):

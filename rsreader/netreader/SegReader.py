@@ -70,7 +70,7 @@ class SegReader(object):
 
     def __getitem__(self, idx):
         assert idx < self.__len__()
-        assert self.__getScale() == [1.0, 1.0]
+        assert self._getScale() == [1.0, 1.0]
         imgidx = 0
         l = self.read_lengths[0]
         while True:
@@ -137,7 +137,7 @@ class SegReader(object):
             label = None
         return data,label
 
-    def __getScale(self):
+    def _getScale(self):
         scale = [1.0,1.0]
         if not self.joint_trans is None:
             gs = self.joint_trans.getScale()
@@ -166,7 +166,7 @@ class SegReader(object):
             nchannel = 0
             for cc in self.bandlist:
                 nchannel += len(cc)
-        scale = self.__getScale()
+        scale = self._getScale()
         self.readsize = (int(scale[0]*self.cropsize[0]),int(scale[1]*self.cropsize[1]))
         if self.readsize[0] == -1:
             self.readsize = imgReaders[0].getSize()

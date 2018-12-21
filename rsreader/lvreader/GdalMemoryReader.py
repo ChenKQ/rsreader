@@ -1,36 +1,37 @@
-from PIL import Image
 import numpy as np
+from .GdalReader import GdalReader
 
-
-class PILReader(object):
+class GdalMemoryReader(GdalReader):
     '''
-    A low-level tool based on PIL.Image to read an image which is specified by the parameter "imgfile".
+    A low-level tool based on GDAL to read an image which is specified by the parameter "imgfile". \
+    It can read common GEO-TIFF and img files which cannot be read by OpenCV or PIL. \
+    Compared with the GdalReader, this class will load the image into memories firstly so as to accelerate the speed. \
+    It can be used to the situation when the image is not too large to load into the memory.
     '''
     def __init__(self,imgfile):
         '''
-        Constructor. It reads the image from the disk into the memory \
-        and stores the contents in the format of numpy.ndarray with the shape of (height, width, channel).
+        Constructor. It opens the image and load the basic information about the image like size, channels, and so on. \
+        It stores the image into the memory in the format of numpy.ndarray with the shape of (channel, height, width).
         :param imgfile: the image file to read.
         '''
-        self.imgfile = imgfile
-        self.pil = Image.open(self.imgfile)
-        self.img = np.asarray(self.pil)
-        if len(self.img.shape) ==2:
-            self.img = np.expand_dims(self.img,2)
+        self.imgfile=imgfile
+        self.bands=[]
+        self._open()
+        self._getBands_and_read_image_into_memory()
 
-    def getNChannel(self):
+    def _getBands_and_read_image_into_memory(self):
         '''
-        Get the number of channels of the image.
-        :return: (int) the number of channels of the image
+        This method gets all bands of tiff file and these bands are stored in self.bands. It is a list type.
+        Then the contents of the image will be loaded into memory as the numpy data type.
+        :return: None
         '''
-        return self.img.shape[2]
-
-    def getSize(self):
-        '''
-        Get the size of the image.
-        :return: the size of the image with the format of a tuple (height, width)
-        '''
-        return self.img.shape[0:2]
+        assert not self.dataset is None
+        self.img = []
+        for i in range(self.dataset.RasterCount):
+            band=self.dataset.GetRasterBand(i+1)
+            self.bands.append(band)
+            self.img.append(band.ReadAsArray())
+        self.img = np.asarray(self.img)
 
     def readPatch(self,startx,starty,width,height,bandlst=[],dtype=np.uint8):
         '''
@@ -64,7 +65,7 @@ class PILReader(object):
         fex = max(0, startx) + min(width, width + startx, imgsize[1] - startx)
         ret = np.zeros((len(bandlst), height, width), dtype=dtype)
         for idx in bandlst:
-            ret[idx-1,sy:ey,sx:ex] = img[fsy:fey,fsx:fex, idx-1]
+            ret[idx-1,sy:ey,sx:ex] = img[idx-1, fsy:fey, fsx:fex]
         return ret
 
     def readImg(self,bandlst=[],dtype=np.uint8):
@@ -76,9 +77,6 @@ class PILReader(object):
         '''
         if bandlst is None or len(bandlst)==0:
             bandlst = range(1,self.getNChannel()+1)
-        ret = self.img[...,np.asarray(bandlst)-1] # h,w,c
-        ret = np.transpose(ret, (2,0,1)) # c, h, w
-        ret = np.asarray(ret, dtype=dtype)
+        ret = self.img[np.asarray(bandlst)-1,...]
+        ret = ret.astype(dtype=dtype)
         return ret
-        # return self.readPatch(0, 0, -1, -1, bandlst, dtype)
-

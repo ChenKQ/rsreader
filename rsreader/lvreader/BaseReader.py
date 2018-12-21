@@ -20,6 +20,9 @@ class BaseReader(object):
         if readertype =='gdal':
             from .GdalReader import GdalReader
             self.reader = GdalReader(self.imgfile)
+        elif readertype == 'gdalmemory':
+            from .GdalMemoryReader import GdalMemoryReader
+            self.reader = GdalMemoryReader(self.imgfile)
         elif readertype == 'opencv':
             from .OpenCVReader import OpenCVReader
             self.reader = OpenCVReader(self.imgfile)
