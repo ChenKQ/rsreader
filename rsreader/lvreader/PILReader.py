@@ -74,13 +74,11 @@ class PILReader(object):
         :param dtype: the data type used to store the image. It can be numpy.uint8, np.uint16 and so on.
         :return: the image read into the memory in the format of numpy.ndarray with the shape of (channel, heigh, width)
         '''
-        return self.readPatch(0, 0, -1, -1, bandlst, dtype)
-
-def xtest(imgfile):
-    reader = PILReader(imgfile)
-    print(reader.getSize(), reader.getNChannel())
-    patch = reader.readPatch(10,10,150,150)
-    img = reader.readImg()
-    print(patch.shape, np.mean(patch), np.min(patch), np.max(patch))
-    print(img.shape, np.mean(img), np.min(img), np.max(img))
+        if bandlst is None or len(bandlst)==0:
+            bandlst = range(1,self.getNChannel()+1)
+        ret = self.img[...,np.asarray(bandlst)-1] # h,w,c
+        ret = np.transpose(ret, (2,0,1)) # c, h, w
+        ret = np.asarray(ret, dtype=dtype)
+        return ret
+        # return self.readPatch(0, 0, -1, -1, bandlst, dtype)
 
