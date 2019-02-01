@@ -27,8 +27,8 @@ class TorchDataset(Dataset):
     def __getitem__(self, idx):
         if self.mode == 'shuffle':
             return self.netreader[idx]
-        else:
+        elif self.netreader.readerStore is not None:
             sample = self.netreader.readerStore.getOneSample(-1)
             return self.netreader.read_img(sample, None, None)
-
-
+        else:
+            return self.netreader.read_img(None, None, None)

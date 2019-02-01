@@ -196,7 +196,7 @@ class ScaleAug(object):
     def __call__(self, *args, **kwargs):
         img = args[0]
         label = args[1]
-        ret = np.zeros((img.shape[0],self.patchsize[0],self.patchsize[1]))
+        ret = np.zeros((img.shape[0],self.patchsize[0],self.patchsize[1]), dtype=img.dtype)
         for i in range(img.shape[0]):
             ret[i] = cv2.resize(img[i],dsize=(self.patchsize[1],self.patchsize[0]))
         label = cv2.resize(label,dsize=(self.patchsize[1],self.patchsize[0]),interpolation=cv2.INTER_NEAREST)
@@ -262,7 +262,7 @@ class RandomCrop(object):
         label = args[1]
         cropSize = self.__getCropSize(img.shape[1:])
         inity, initx = RandomCrop.__randomCrop(img.shape[1:], cropSize)
-        ret = np.zeros((img.shape[0], self.dSize[0], self.dSize[1]))
+        ret = np.zeros((img.shape[0], self.dSize[0], self.dSize[1]), dtype=img.dtype)
         for i in range(img.shape[0]):
             cropped = img[i, inity:inity+cropSize[0], initx:initx+cropSize[1]]
             ret[i] = cv2.resize(cropped,dsize=(self.dSize[1],self.dSize[0]))
