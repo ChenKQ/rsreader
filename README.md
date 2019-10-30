@@ -5,6 +5,14 @@ By now, it supports gluon/mxnet and pytorch.
 And it can be used to the tasks of the regular semantic segmentation and
 semantic segmentation based on multi-modal data.
 
+## Install
+> Step1: generate whl package
+ - python3 setup.py bdist_wheel
+
+> Step2: install
+ - cd dist
+ - pip3 install xxx.whl
+
 ## Usage
 
 > Step 1: list all the aerial images in a file:
