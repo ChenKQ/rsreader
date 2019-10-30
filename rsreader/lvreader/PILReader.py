@@ -63,8 +63,8 @@ class PILReader(object):
         fsx = max(0, startx)
         fex = max(0, startx) + min(width, width + startx, imgsize[1] - startx)
         ret = np.zeros((len(bandlst), height, width), dtype=dtype)
-        for idx in bandlst:
-            ret[idx-1,sy:ey,sx:ex] = img[fsy:fey,fsx:fex, idx-1]
+        for dst_idx, idx in enumerate(bandlst):
+            ret[dst_idx,sy:ey,sx:ex] = img[fsy:fey,fsx:fex, idx-1]
         return ret
 
     def readImg(self,bandlst=[],dtype=np.uint8):

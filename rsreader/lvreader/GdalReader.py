@@ -81,8 +81,8 @@ class GdalReader(object):
         flenthx = min(width, width + startx, self.dataset.RasterXSize - startx)
         fheighty =min(height, height + starty, self.dataset.RasterYSize - starty)
         img = np.zeros((len(bandlst), height, width), dtype=dtype)
-        for idx in bandlst:
-            img[idx - 1, sy:ey, sx:ex] = self.bands[idx-1].ReadAsArray(fsx,fsy,flenthx,fheighty)
+        for dst_idx, idx in enumerate(bandlst):
+            img[dst_idx, sy:ey, sx:ex] = self.bands[idx-1].ReadAsArray(fsx,fsy,flenthx,fheighty)
         return img
 
     def readImg(self,bandlst=[],dtype=np.uint8):
