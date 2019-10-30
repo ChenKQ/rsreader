@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 setup(
     # Metadata
     name='rsreader',
-    version='20181204',
+    version='20191030',
     author='chenkq',
     url='https://github.com/chenkq/rsreader',
     description='A simple reader for remote sensing',
